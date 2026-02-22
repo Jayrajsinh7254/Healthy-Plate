@@ -587,21 +587,21 @@ Balance Score: ${score}%
         </div>
       )}
 
-      {/* Search Bar */}
-      <div className="mb-8 relative">
-        <input
-          type="text"
-          placeholder="Search for foods..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-12 pr-4 py-4 rounded-2xl border-none shadow-md focus:ring-2 focus:ring-forest transition-all bg-white"
-        />
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl">🔍</span>
-      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Search Bar */}
+        <div className="lg:col-span-2 order-2 lg:order-1 relative">
+          <input
+            type="text"
+            placeholder="Search for foods..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-12 pr-4 py-4 rounded-2xl border-none shadow-md focus:ring-2 focus:ring-forest transition-all bg-white"
+          />
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl">🔍</span>
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr,340px] gap-8">
         {/* LEFT COLUMN: Food Selector */}
-        <div className="space-y-8">
+        <div className="space-y-8 order-3 lg:order-2">
           {/* Category Tabs */}
           <div className="flex flex-wrap gap-2">
             {CATEGORIES.map(cat => (
@@ -681,7 +681,7 @@ Balance Score: ${score}%
         </div>
 
         {/* RIGHT COLUMN: Plate & Stats */}
-        <div className="space-y-6">
+        <div className="space-y-6 order-1 lg:order-3">
           {/* Your Plate Card */}
           <div className="bg-white p-6 rounded-[2rem] shadow-lg text-center relative overflow-hidden">
             <div className="flex justify-between items-center mb-6">
