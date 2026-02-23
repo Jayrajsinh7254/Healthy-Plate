@@ -589,7 +589,7 @@ Balance Score: ${score}%
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Search Bar */}
-        <div className="lg:col-span-2 order-2 lg:order-1 relative">
+        <div id="ingredients-section" className="lg:col-span-2 order-2 lg:order-1 relative">
           <input
             type="text"
             placeholder="Search for foods..."
@@ -739,6 +739,15 @@ Balance Score: ${score}%
               ))}
             </div>
           </div>
+
+          {/* Mobile "Add Food" Button - only visible on mobile, after the plate */}
+          <button
+            onClick={() => document.getElementById('ingredients-section')?.scrollIntoView({ behavior: 'smooth' })}
+            className="w-full md:hidden bg-forest text-white px-5 py-4 rounded-2xl shadow-lg flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all border-2 border-forest/20 mt-4"
+          >
+            <span className="text-xl">🥗</span>
+            <span className="font-bold">Add Ingredients</span>
+          </button>
 
           {/* Nutrition Summary Card */}
           <div className="bg-white p-6 rounded-[2rem] shadow-lg space-y-4">
