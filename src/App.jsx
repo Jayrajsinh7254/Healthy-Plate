@@ -485,9 +485,10 @@ Balance Score: ${score}%
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 font-sans">
+    <div className="max-w-7xl mx-auto px-4 py-8 font-sans" role="application" aria-label="HealthyPlate Meal Planner">
+      <a href="#ingredients-section" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-forest focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:z-50">Skip to ingredients</a>
       {/* Header */}
-      <header className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+      <header className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4" role="banner">
         <h1 className="text-4xl font-serif font-bold text-forest">HealthyPlate</h1>
         <div className="flex flex-wrap justify-center gap-3">
           {plateItems.length > 0 && (
@@ -587,9 +588,9 @@ Balance Score: ${score}%
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <main className="grid grid-cols-1 lg:grid-cols-2 gap-8" role="main">
         {/* Search Bar */}
-        <div id="ingredients-section" className="lg:col-span-2 order-2 lg:order-1 relative">
+        <section id="ingredients-section" className="lg:col-span-2 order-2 lg:order-1 relative" aria-label="Search for foods">
           <input
             type="text"
             placeholder="Search for foods..."
@@ -598,12 +599,12 @@ Balance Score: ${score}%
             className="w-full pl-12 pr-4 py-4 rounded-2xl border-none shadow-md focus:ring-2 focus:ring-forest transition-all bg-white"
           />
           <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xl">🔍</span>
-        </div>
+        </section>
 
         {/* LEFT COLUMN: Food Selector */}
-        <div className="space-y-8 order-3 lg:order-2">
+        <section className="space-y-8 order-3 lg:order-2" aria-label="Food selection">
           {/* Category Tabs */}
-          <div className="flex flex-wrap gap-2">
+          <nav className="flex flex-wrap gap-2" aria-label="Food categories">
             {CATEGORIES.map(cat => (
               <button
                 key={cat}
@@ -618,10 +619,10 @@ Balance Score: ${score}%
                 {cat}
               </button>
             ))}
-          </div>
+          </nav>
 
           {/* Food Cards Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" role="list" aria-label="Available foods">
             {filteredFoods.map(food => (
               <button
                 key={food.name}
@@ -678,10 +679,10 @@ Balance Score: ${score}%
               </button>
             )}
           </div>
-        </div>
+        </section>
 
         {/* RIGHT COLUMN: Plate & Stats */}
-        <div className="space-y-6 order-1 lg:order-3">
+        <section className="space-y-6 order-1 lg:order-3" aria-label="Your plate and nutrition">
           {/* Your Plate Card */}
           <div className="bg-white p-6 rounded-[2rem] shadow-lg text-center relative overflow-hidden">
             <div className="flex justify-between items-center mb-6">
@@ -750,7 +751,7 @@ Balance Score: ${score}%
           </button>
 
           {/* Nutrition Summary Card */}
-          <div className="bg-white p-6 rounded-[2rem] shadow-lg space-y-4">
+          <section className="bg-white p-6 rounded-[2rem] shadow-lg space-y-4" aria-label="Nutrition summary">
             <div className="bg-gradient-to-br from-forest to-green-700 p-6 rounded-2xl text-white shadow-inner mb-6">
               <div className="text-sm opacity-80 font-medium mb-1">Total Calories</div>
               <div className="text-4xl font-serif font-bold">{Math.round(totals.calories)}</div>
@@ -778,7 +779,7 @@ Balance Score: ${score}%
                 </div>
               ))}
             </div>
-          </div>
+          </section>
 
           {/* Ideal Plate Guide Card */}
           <div className="bg-forest p-6 rounded-[2rem] shadow-lg text-white">
@@ -795,12 +796,12 @@ Balance Score: ${score}%
               ))}
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
 
       {/* Attribution/Footer */}
-      <footer className="mt-12 text-center text-slate-400 text-sm">
-        <p>© 2026 HealthyPlate • Your fresh organic meal planner</p>
+      <footer className="mt-12 text-center text-slate-400 text-sm" role="contentinfo">
+        <p>© 2026 HealthyPlate • Free online healthy meal planner with macro tracking and recipe suggestions</p>
       </footer>
     </div>
   );

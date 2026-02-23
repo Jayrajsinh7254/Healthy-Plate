@@ -3,13 +3,91 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Healthy Plate Planner</title>
+
+  <!-- Primary SEO -->
+  <title>HealthyPlate — Free Meal Planner | Build Balanced, Healthy Meals</title>
+  <meta name="description"
+    content="Build balanced, healthy meals visually. Track calories, protein, carbs, fat & fiber in real-time. Get a balance score and discover recipe ideas — all in one free meal planner." />
+  <meta name="keywords"
+    content="healthy meal planner, nutrition tracker, balanced plate, macro tracker, diet planner, healthy eating, meal prep, calorie counter, protein tracker, balanced diet" />
+  <meta name="author" content="HealthyPlate" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://healthy-plates.web.app/" />
+
+  <!-- Open Graph (Facebook, LinkedIn, WhatsApp) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="HealthyPlate — Build Balanced Meals Visually" />
+  <meta property="og:description"
+    content="Track macros in real-time, get a balance score, and discover recipes. Free online meal planner for healthy eating." />
+  <meta property="og:url" content="https://healthy-plates.web.app/" />
+  <meta property="og:image" content="https://healthy-plates.web.app/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="HealthyPlate" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="HealthyPlate — Build Balanced Meals Visually" />
+  <meta name="twitter:description"
+    content="Track macros, build balanced plates, and find healthy recipes. Free meal planner tool." />
+  <meta name="twitter:image" content="https://healthy-plates.web.app/og-image.png" />
+
+  <!-- Theme & Icons -->
+  <meta name="theme-color" content="#166534" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "HealthyPlate",
+    "url": "https://healthy-plates.web.app",
+    "description": "Free online meal planner to build balanced, healthy meals visually with real-time macro tracking and recipe suggestions.",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "Web",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "creator": {
+      "@type": "Organization",
+      "name": "HealthyPlate"
+    },
+    "featureList": [
+      "Interactive plate visualizer",
+      "Real-time macro tracking",
+      "Balance score calculator",
+      "Recipe video suggestions",
+      "100+ healthy foods database"
+    ]
+  }
+  </script>
 </head>
 
 <body>
   <div id="root"></div>
+  <noscript>
+    <div style="max-width: 800px; margin: 40px auto; padding: 20px; font-family: sans-serif;">
+      <h1>HealthyPlate — Free Meal Planner</h1>
+      <p>Build balanced, healthy meals visually. Track calories, protein, carbs, fat, and fiber in real-time. Get a
+        balance score and discover recipe ideas — all in one free online meal planner.</p>
+      <h2>Features</h2>
+      <ul>
+        <li>Interactive plate visualizer with SVG pie chart</li>
+        <li>100+ healthy foods across 5 categories: Vegetables, Fruits, Proteins, Grains, Dairy</li>
+        <li>Real-time macro tracking: Calories, Protein, Carbs, Fat, Fiber</li>
+        <li>Balance score to measure meal quality</li>
+        <li>YouTube recipe video suggestions based on your ingredients</li>
+      </ul>
+      <p>Please enable JavaScript to use HealthyPlate.</p>
+    </div>
+  </noscript>
   <script type="module" src="/src/main.jsx"></script>
 </body>
 
