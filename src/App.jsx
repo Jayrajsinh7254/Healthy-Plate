@@ -801,7 +801,8 @@ Balance Score: ${score}%
 
       {/* Attribution/Footer */}
       <footer className="mt-12 text-center text-slate-400 text-sm" role="contentinfo">
-        <p>© 2026 HealthyPlate • Free online healthy meal planner with macro tracking and recipe suggestions</p>
+        <p>© 2026 HealthyPlate • Free online healthy meal planner with macro tracking and recipe suggestions</p><br />
+        <p><b>Powered By:</b> <a href="https://www.devtechservicesindia.com/"><u>Dev Tech Services</u></a></p>
       </footer>
     </div>
   );
