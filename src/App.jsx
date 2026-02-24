@@ -10,6 +10,14 @@ const saveUsers = (users) => localStorage.setItem('hp_users', JSON.stringify(use
 const getSession = () => JSON.parse(localStorage.getItem('hp_session') || 'null');
 const saveSession = (session) => localStorage.setItem('hp_session', JSON.stringify(session));
 
+// --- RESTRICTIONS ---
+const MEAT_KEYWORDS = [
+  'Chicken', 'Salmon', 'Tuna', 'Beef', 'Pork', 'Turkey', 'Shrimp', 'Cod',
+  'Tilapia', 'Sardines', 'Crab', 'Lobster', 'Scallops', 'Steak', 'Lamb',
+  'Bacon', 'Jerky', 'Sausage', 'Ham', 'Pepperoni', 'Salami', 'Mutton', 'Venison', 'Duck', 'Goose', 'Anchovies', 'Swordfish'
+];
+const IS_NON_VEG = (name) => MEAT_KEYWORDS.some(meat => name.toLowerCase().includes(meat.toLowerCase()));
+
 // --- DATA ---
 const FOOD_DATABASE = {
   Vegetables: [
@@ -645,7 +653,10 @@ const calculateBalanceScore = (plateItems) => {
 };
 
 const calculateDiet = (user) => {
-  const { weight, height, age, gender, activity, goal, diet } = user;
+  const weight = Number(user.weight) || 70;
+  const height = Number(user.height) || 170;
+  const age = Number(user.age) || 30;
+  const { gender, activity, goal, diet } = user;
 
   // 1. Mifflin-St Jeor BMR
   let bmr;
@@ -1081,6 +1092,21 @@ const DietPlanScreen = ({ user, onBack, apiDietPlan, isGeneratingPlan, onRefresh
   const conditionAdvice = GET_CONDITION_ADVICE(user.conditions);
   const tips = TIPS_BY_GOAL[user.goal] || TIPS_BY_GOAL['improve-health'];
 
+  // Vegetarian Fallback Adapter
+  const vegetarianize = (mealName) => {
+    if (user.diet !== 'Vegetarian') return mealName;
+    const swaps = {
+      'Chicken': 'Tofu', 'Salmon': 'Tempeh', 'Tuna': 'Chickpea', 'Beef': 'Seitan',
+      'Pork': 'Grilled Paneer', 'Turkey': 'Lentils', 'Shrimp': 'Trumpet Mushrooms',
+      'Steak': 'Portobello Mushroom', 'Lamb': 'Roasted Chickpeas', 'Bacon': 'Tempeh Bacon'
+    };
+    let newName = mealName;
+    Object.keys(swaps).forEach(meat => {
+      newName = newName.replace(new RegExp(meat, 'gi'), swaps[meat]);
+    });
+    return newName;
+  };
+
   const TabButton = ({ id, label }) => (
     <button
       onClick={() => setActiveTab(id)}
@@ -1265,7 +1291,7 @@ const DietPlanScreen = ({ user, onBack, apiDietPlan, isGeneratingPlan, onRefresh
                       <div className="text-xs font-bold text-slate-400 mt-2">{m.time}</div>
                     </div>
                     <div className="flex-1">
-                      <p className="text-lg font-bold text-slate-800 group-hover:text-forest transition-colors">{m.food}</p>
+                      <p className="text-lg font-bold text-slate-800 group-hover:text-forest transition-colors">{vegetarianize(m.food)}</p>
                     </div>
                   </div>
                 ))}
@@ -1518,6 +1544,15 @@ const AccountSettings = ({ user, onSave, onClose }) => {
           </div>
 
           <div>
+            <label className="text-[10px] font-black uppercase text-slate-400 block mb-1.5 ml-1">Gender</label>
+            <select name="gender" value={formData.gender} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-slate-50 border-none ring-1 ring-slate-100 focus:ring-2 focus:ring-forest transition-all font-bold text-sm">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div>
             <label className="text-[10px] font-black uppercase text-slate-400 block mb-1.5 ml-1">Goal</label>
             <select name="goal" value={formData.goal} onChange={handleChange} className="w-full px-4 py-3 rounded-xl bg-slate-50 border-none ring-1 ring-slate-100 focus:ring-2 focus:ring-forest transition-all font-bold text-sm">
               <option value="lose-weight">Lose Weight</option>
@@ -1755,9 +1790,13 @@ export default function App() {
     alert('Summary copied to clipboard!');
   };
 
-  const filteredFoods = FOOD_DATABASE[activeCategory].filter(food =>
-    food.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredFoods = FOOD_DATABASE[activeCategory].filter(food => {
+    const matchesSearch = food.name.toLowerCase().includes(searchTerm.toLowerCase());
+    if (user?.diet === 'Vegetarian') {
+      return matchesSearch && !IS_NON_VEG(food.name);
+    }
+    return matchesSearch;
+  });
 
   const totals = plateItems.reduce((acc, item) => ({
     calories: acc.calories + item.calories,
@@ -1782,33 +1821,38 @@ export default function App() {
       .flat()
       .find(f => f.name.toLowerCase().includes(query.toLowerCase()));
 
-    if (!USDA_API_KEY || USDA_API_KEY === "D0WYpIpDKSAWhX9OijB8DHed4jFaXIc2zpMf01bG") {
+    if (!USDA_API_KEY || USDA_API_KEY === "YOUR_USDA_KEY" || USDA_API_KEY === "DEMO_KEY") {
       return localMatch ? { ...localMatch, source: 'Local Fallback' } : null;
     }
 
     try {
       const res = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?query=${encodeURIComponent(query)}&dataType=Foundation,SR%20Legacy&pageSize=1&api_key=${USDA_API_KEY}`);
       const data = await res.json();
-      if (data.foods && data.foods[0]) {
-        const f = data.foods[0];
-        const getNutrient = (name) => {
-          const n = f.foodNutrients.find(nut => nut.nutrientName.toLowerCase().includes(name.toLowerCase()));
-          return n ? n.value : 0;
-        };
-        return {
-          name: f.description,
-          usdaName: f.description,
-          calories: getNutrient('Energy'),
-          protein: getNutrient('Protein'),
-          carbs: getNutrient('Carbohydrate'),
-          fat: getNutrient('Total lipid'),
-          fiber: getNutrient('Fiber'),
-          vitC: getNutrient('Vitamin C'),
-          calcium: getNutrient('Calcium'),
-          iron: getNutrient('Iron'),
-          source: 'USDA'
-        };
+      if (!data || !data.foods || data.foods.length === 0) return localMatch ? { ...localMatch, source: 'Local Fallback' } : null;
+
+      const f = data.foods[0];
+
+      // Diet Restricted Search
+      if (user?.diet === 'Vegetarian' && IS_NON_VEG(f.description)) {
+        return localMatch && !IS_NON_VEG(localMatch.name) ? { ...localMatch, source: 'Local Fallback' } : null;
       }
+      const getNutrient = (name) => {
+        const n = f.foodNutrients.find(nut => nut.nutrientName.toLowerCase().includes(name.toLowerCase()));
+        return n ? n.value : 0;
+      };
+      return {
+        name: f.description,
+        usdaName: f.description,
+        calories: getNutrient('Energy'),
+        protein: getNutrient('Protein'),
+        carbs: getNutrient('Carbohydrate'),
+        fat: getNutrient('Total lipid'),
+        fiber: getNutrient('Fiber'),
+        vitC: getNutrient('Vitamin C'),
+        calcium: getNutrient('Calcium'),
+        iron: getNutrient('Iron'),
+        source: 'USDA'
+      };
     } catch (e) {
       console.error("USDA API Error", e);
     }
@@ -1818,7 +1862,7 @@ export default function App() {
   };
 
   const fetchRealRecipes = async (ingredients) => {
-    if (!SPOONACULAR_API_KEY || SPOONACULAR_API_KEY === "f796c8a30ef7484681b5f9070dbf5a7a") return null;
+    if (!SPOONACULAR_API_KEY || SPOONACULAR_API_KEY === "YOUR_SPOONACULAR_KEY") return null;
     try {
       const res = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredients.slice(0, 5).join(',')}&number=9&ranking=1&ignorePantry=true&apiKey=${SPOONACULAR_API_KEY}`);
       const data = await res.json();
@@ -1857,7 +1901,7 @@ export default function App() {
   };
 
   const fetchProfessionalMealPlan = async (u) => {
-    if (!SPOONACULAR_API_KEY || SPOONACULAR_API_KEY === "f796c8a30ef7484681b5f9070dbf5a7a") {
+    if (!SPOONACULAR_API_KEY || SPOONACULAR_API_KEY === "YOUR_SPOONACULAR_KEY") {
       return;
     }
 
