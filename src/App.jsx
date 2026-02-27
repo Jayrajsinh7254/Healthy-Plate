@@ -1066,7 +1066,7 @@ function PlateBuilderApp({ user, setUser, onLogout, onViewPlan, apiDietPlan, isG
                 ))}
               </div>
               <input placeholder="🔍 Filter foods..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} style={{ width: '100%', padding: '10px 14px', borderRadius: 12, border: 'none', background: '#f8fafc', fontSize: 13, fontFamily: 'Georgia,serif', outline: 'none', boxShadow: 'inset 0 0 0 1.5px #e2e8f0', marginBottom: 16, boxSizing: 'border-box' }} />
-              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(auto-fill,minmax(130px,1fr))', gap: 10, maxHeight: isMobile ? 400 : 560, overflowY: 'auto', paddingRight: 4 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(auto-fill,minmax(130px,1fr))', gap: 10, maxHeight: isMobile ? 400 : 560, overflowY: 'auto', paddingRight: 4, paddingTop: 10 }}>
                 {filteredFoods.map(food => (
                   <button key={`${food.category}-${food.name}`} onClick={() => add(food)} style={{ padding: '14px 12px', borderRadius: 16, border: `1.5px solid ${CAT[activeCategory].border}44`, background: '#fff', cursor: 'pointer', textAlign: 'left', boxShadow: '0 2px 6px rgba(0,0,0,0.06)', transition: 'all 0.2s', fontFamily: 'Georgia,serif' }}
                     onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.borderColor = CAT[activeCategory].border; e.currentTarget.style.boxShadow = '0 6px 18px rgba(0,0,0,0.12)'; }}
